@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  app:
+    env_file:
+      - .appenv
+    build: ./app
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app:/usr/src/app
+    depends_on:
+      - database
+
+  database:
+    env_file:
+      - .dbenv
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    user: postgres
+
+volumes:
+  postgres_data:
